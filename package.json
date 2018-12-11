@@ -1,6 +1,6 @@
 {
   "name": "react-grid-layout",
-  "version": "0.16.6",
+  "version": "0.16.12-graphext",
   "description": "A draggable and resizable grid layout with responsive breakpoints, for React.",
   "main": "index.js",
   "scripts": {
@@ -12,12 +12,11 @@
     "dev": "make dev",
     "prepublishOnly": "make build",
     "validate": "npm ls",
-    "flow": "flow",
-    "precommit": "lint-staged && make lint"
+    "flow": "flow"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:STRML/react-grid-layout.git"
+    "url": "https://github.com/graphext/react-grid-layout.git"
   },
   "keywords": [
     "react",
@@ -78,9 +77,6 @@
     "valiquire": "^0.3.0",
     "webpack": "^3.11.0",
     "webpack-dev-server": "^2.11.1"
-  },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org"
   },
   "jest": {
     "testMatch": [

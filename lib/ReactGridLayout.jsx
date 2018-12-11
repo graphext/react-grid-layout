@@ -19,17 +19,17 @@ import {
 import GridItem from "./GridItem";
 import type {
   ChildrenArray as ReactChildrenArray,
-  Element as ReactElement
+    Element as ReactElement
 } from "react";
 
 // Types
 import type {
   EventCallback,
-  CompactType,
-  GridResizeEvent,
-  GridDragEvent,
-  Layout,
-  LayoutItem
+    CompactType,
+    GridResizeEvent,
+    GridDragEvent,
+    Layout,
+    LayoutItem
 } from "./utils";
 
 type State = {
@@ -104,7 +104,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
     draggableHandle: PropTypes.string,
 
     // Deprecated
-    verticalCompact: function(props: Props) {
+    verticalCompact: function (props: Props) {
       if (
         props.verticalCompact === false &&
         process.env.NODE_ENV !== "production"
@@ -112,7 +112,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
         console.warn(
           // eslint-disable-line no-console
           "`verticalCompact` on <ReactGridLayout> is deprecated and will be removed soon. " +
-            'Use `compactType`: "horizontal" | "vertical" | null.'
+          'Use `compactType`: "horizontal" | "vertical" | null.'
         );
       }
     },
@@ -121,7 +121,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
 
     // layout is an array of object with the format:
     // {x: Number, y: Number, w: Number, h: Number, i: String}
-    layout: function(props: Props) {
+    layout: function (props: Props) {
       var layout = props.layout;
       // I hope you're setting the data-grid property on the grid items
       if (layout === undefined) return;
@@ -181,17 +181,17 @@ export default class ReactGridLayout extends React.Component<Props, State> {
     //
 
     // Children must not have duplicate keys.
-    children: function(props: Props, propName: string) {
+    children: function (props: Props, propName: string) {
       var children = props[propName];
 
       // Check children keys for duplicates. Throw if found.
       var keys = {};
-      React.Children.forEach(children, function(child) {
+      React.Children.forEach(children, function (child) {
         if (keys[child.key]) {
           throw new Error(
             'Duplicate child key "' +
-              child.key +
-              '" found! This will cause problems in ReactGridLayout.'
+            child.key +
+            '" found! This will cause problems in ReactGridLayout.'
           );
         }
         keys[child.key] = true;
@@ -261,15 +261,8 @@ export default class ReactGridLayout extends React.Component<Props, State> {
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    let newLayoutBase;
-    // Legacy support for compactType
-    // Allow parent to set layout directly.
-    if (
-      !isEqual(nextProps.layout, this.props.layout) ||
-      nextProps.compactType !== this.props.compactType
-    ) {
-      newLayoutBase = nextProps.layout;
-    } else if (!childrenEqual(this.props.children, nextProps.children)) {
+    let newLayoutBase = nextProps.layout;
+    if (!childrenEqual(this.props.children, nextProps.children)) {
       // If children change, also regenerate the layout. Use our state
       // as the base in case because it may be more up to date than
       // what is in props.
@@ -459,7 +452,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
       hasCollisions = collisions.length > 0;
 
       // If we're colliding, we need adjust the placeholder.
-      if (hasCollisions) {
+      if (!l.lockAspectRatio && hasCollisions) {
         // adjust w && h to maximum allowed space
         let leastX = Infinity,
           leastY = Infinity;
@@ -471,6 +464,10 @@ export default class ReactGridLayout extends React.Component<Props, State> {
         if (Number.isFinite(leastX)) l.w = leastX - l.x;
         if (Number.isFinite(leastY)) l.h = leastY - l.y;
       }
+    }
+
+    if (l.lockAspectRatio && l.aspectRatio) {
+
     }
 
     if (!hasCollisions) {
@@ -621,6 +618,7 @@ export default class ReactGridLayout extends React.Component<Props, State> {
         maxH={l.maxH}
         maxW={l.maxW}
         static={l.static}
+        lockAspectRatio={l.lockAspectRatio}
       >
         {child}
       </GridItem>
